@@ -1,0 +1,6 @@
+Import('*')
+
+SimObject('HelloWorldObject.py')
+Source('hello_world_object.cc')
+
+DebugFlag('HelloWorld')
