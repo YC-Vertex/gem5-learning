@@ -14,7 +14,7 @@ system.clk_domain.voltage_domain = VoltageDomain()
 
 # Set up the memory system
 system.mem_mode = 'timing'
-system.mem_ranges = [AddrRange('512MB')]
+system.mem_ranges = [AddrRange('1GB')]
 
 # CPU
 system.cpu = TimingSimpleCPU()
@@ -42,7 +42,7 @@ system.mem_ctrl.port = system.membus.master
 
 # Tell the system what to do
 process = Process()
-process.cmd = ['tests/test-progs/hello/bin/x86/linux/hello']
+process.cmd = ['tests/test-progs/sive_of_eratosthenes/sive_of_eratosthenes']
 system.cpu.workload = process
 system.cpu.createThreads()
 
