@@ -99,3 +99,8 @@ class WeightedLRURP(BaseReplacementPolicy):
     type = "WeightedLRURP"
     cxx_class = "WeightedLRUPolicy"
     cxx_header = "mem/cache/replacement_policies/weighted_lru_rp.hh"
+
+class NMRURP(BaseReplacementPolicy):
+    type = "NMRURP"
+    cxx_class = "NMRURP"
+    cxx_header = "mem/cache/replacement_policies/nmru_rp.hh"
