@@ -136,6 +136,14 @@ def addNoISAOptions(parser):
     parser.add_option("--l3_assoc", type="int", default=16)
     parser.add_option("--cacheline_size", type="int", default=64)
 
+    # Cache replacement policy options
+    parser.add_option("--l1d-repl", type="choice", default="LRURP",
+                      choices=ObjectList.repl_list.get_names(),
+                      help = "replacement policy for l1")
+    parser.add_option("--l2-repl", type="choice", default="LRURP",
+                      choices=ObjectList.repl_list.get_names(),
+                      help = "replacement policy for l2")
+
     # Enable Ruby
     parser.add_option("--ruby", action="store_true")
 
@@ -483,3 +491,4 @@ def addFSOptions(parser):
     parser.add_option("--command-line-file", action="store",
                       default=None, type="string",
                       help="File with a template for the kernel command line")
+
