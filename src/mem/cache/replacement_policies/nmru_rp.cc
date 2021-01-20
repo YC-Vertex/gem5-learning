@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include "base/random.hh"
 #include "params/NMRURP.hh"
 #include "sim/core.hh"
 
@@ -42,15 +43,23 @@ NMRURP::getVictim(const ReplacementCandidates& candidates) const
 {
     assert(candidates.size() > 0);
 
-    ReplaceableEntry *victim = candidates[0];
-    for (const auto& candidate : candidates) {
-        if (ptrCast(candidate->replacementData)->lastTouchTick
-            <= ptrCast(victim->replacementData)->lastTouchTick) {
-            victim = candidate;
+    unsigned int mru_index = 0;
+    Tick mru_tick = 0;
+    for (unsigned int i = 0; i < candidates.size(); ++i) {
+        const auto &candidate = candidates[i];
+        Tick cand_tick = ptrCast(candidate->replacementData)->lastTouchTick;
+        if (cand_tick > mru_tick) {
+            mru_tick = cand_tick;
+            mru_index = i;
         }
     }
 
-    return victim;
+    unsigned int victim_index = 0;
+    do {
+        random_mt.random<unsigned>(0, candidates.size()-1);
+    } while (victim_index == mru_index);
+
+    return candidates[victim_index];
 }
 
 NMRURP::pReplData

@@ -104,3 +104,9 @@ class NMRURP(BaseReplacementPolicy):
     type = "NMRURP"
     cxx_class = "NMRURP"
     cxx_header = "mem/cache/replacement_policies/nmru_rp.hh"
+
+class LIPRPs(BaseReplacementPolicy):
+    type = "LIPRPs"
+    cxx_class = "LIPRP"
+    cxx_header = "mem/cache/replacement_policies/lip_rp.hh"
+
