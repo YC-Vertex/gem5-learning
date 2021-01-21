@@ -1,0 +1,9 @@
+Import('*')
+
+SimObject('HelloWorldObject.py')
+Source('hello_world_object.cc')
+DebugFlag('HelloWorld')
+
+SimObject('HwMemobj.py')
+Source('hw_memobj.cc')
+DebugFlag('HwMemobj')
