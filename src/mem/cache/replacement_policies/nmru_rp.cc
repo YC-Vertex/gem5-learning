@@ -56,7 +56,7 @@ NMRURP::getVictim(const ReplacementCandidates& candidates) const
 
     unsigned int victim_index = 0;
     do {
-        random_mt.random<unsigned>(0, candidates.size()-1);
+        victim_index = random_mt.random<unsigned>(0, candidates.size()-1);
     } while (victim_index == mru_index);
 
     return candidates[victim_index];
