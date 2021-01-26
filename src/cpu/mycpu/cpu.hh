@@ -1,6 +1,16 @@
 #ifndef __CPU_MYCPU_CPU_HH__
 #define __CPU_MYCPU_CPU_HH__
 
+#include <vector>
+
+#include "config/the_isa.hh"
+#include "cpu/base.hh"
+#include "cpu/mycpu/exec_context.hh"
+#include "cpu/mycpu/memory_request.hh"
+#include "cpu/simple_thread.hh"
+#include "params/MyCPU.hh"
+#include "sim/insttracer.hh"
+
 class MyCPU : public BaseCPU
 {
   public:
