@@ -14,16 +14,42 @@
 class MyCPU : public BaseCPU
 {
   public:
-    class CPUPort : public MasterPort
+    class CPUPort : public RequestPort
     {
+      private:
+        MemoryRequest *outstandingRequest;
+        packetPtr blockedPacket;
+
+      public:
+        CPUPort(const std::string &name, MyCPU *owner) :
+            RequestPort(name, owner),
+            outstandingRequest(nullptr),
+            blockPacket(nullptr)
+        { }
+
+        void sendPacket(MemoryRequest *request, PacketPtr pkt);
+
+        bool isBlocked() { return outstandingRequest != nullptr); }
+
+      protected:
+        bool recvTimingResp(PacketPtr pkt) override;
+        void recvReqRetry() override;
     };
 
     class IcachePort : public CPUPort
     {
+      public:
+        IcachePort(MyCPU *owner) :
+            CPUPort(owner->name + ".icahce_port", owner)
+        { }
     };
 
     class DcachePort : public CPUPort
     {
+      public:
+        DcachePort(MyCPU *owner) :
+            CPUPort(owner->name + ".dcache_port", owner)
+        { }
     };
 
   private:
@@ -45,10 +71,10 @@ class MyCPU : public BaseCPU
     void activateContext(ThreadID tid) override;
     void wakeup(ThreadID tid) override;
 
-    RequestPort &getDataPort() override;
-    RequestPort &getInstPort() override;
-    Counter totalInsts() const override;
-    Counter totalOps() const override;
+    RequestPort &getDataPort() override { return dport; }
+    RequestPort &getInstPort() override { return iport; }
+    Counter totalInsts() const override { return 0; }
+    Counter totalOps() const override { return 0; }
 
     void finishFetchTranslate(MemoryRequest *request);
     void finishDataTranslate(MemoryRequest *request);

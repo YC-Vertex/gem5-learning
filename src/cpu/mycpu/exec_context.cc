@@ -9,9 +9,9 @@ MyCPUContext::readIntRegOperand(const StaticInst *si, int idx)
 }
 
 void
-MyCPUContext::setIntRegOperand(cosnt StaticInst *si, int idx, IntReg val)
+MyCPUContext::setIntRegOperand(const StaticInst *si, int idx, IntReg val)
 {
-    cosnt RegId &reg = si->destRegIdx(idx);
+    const RegId &reg = si->destRegIdx(idx);
     assert(reg.isIntReg());
     thread.setIntReg(reg.index(), val);
 }
@@ -25,9 +25,9 @@ MyCPUContext::readFloatRegOperand(const StaticInst *si, int idx)
 }
 
 void
-MyCPUContext::setFloatRegOperand(cosnt StaticInst *si, int idx, FloatReg val)
+MyCPUContext::setFloatRegOperand(const StaticInst *si, int idx, FloatReg val)
 {
-    cosnt RegId &reg = si->destRegIdx(idx);
+    const RegId &reg = si->destRegIdx(idx);
     assert(reg.isFloatReg());
     thread.setFloatReg(reg.index(), val);
 }
@@ -41,9 +41,9 @@ MyCPUContext::readFloatRegOperandBits(const StaticInst *si, int idx)
 }
 
 void
-MyCPUContext::setFloatRegOperandBits(cosnt StaticInst *si, int idx, IntRegBits val)
+MyCPUContext::setFloatRegOperandBits(const StaticInst *si, int idx, IntRegBits val)
 {
-    cosnt RegId &reg = si->destRegIdx(idx);
+    const RegId &reg = si->destRegIdx(idx);
     assert(reg.isFloatReg());
     thread.setFloatRegBits(reg.index(), val);
 }
@@ -65,7 +65,7 @@ MyCPUContext::getWritableVecRegOperand(const StaticInst *si, int idx)
 }
 
 void
-MyCPUContext::setVecRegOperand(cosnt StaticInst *si, int idx, const VecRegContainer &val)
+MyCPUContext::setVecRegOperand(const StaticInst *si, int idx, const VecRegContainer &val)
 {
     const RegId &reg = si->destRegIdx(idx);
     assert(reg.isVecReg());

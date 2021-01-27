@@ -41,7 +41,7 @@ class MemoryRequest : public BaseTLB::Translation
     // constructor for reads and writes
     MemoryRequest(MyCPU &cpu, SimpleThread &thread, StaticInstPtr inst,
         Addr addr, unsigned int size, Request::Flags flags,
-        uint8_t *data = nullptr, uint64_t *res = nullptr);
+        uint8_t *_data = nullptr, uint64_t *res = nullptr);
     // constructor for instruction fetches
     MemoryRequest(MyCPU &cpu, SimpleThread &thread, Addr addr);
     // destructor

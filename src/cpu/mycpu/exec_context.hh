@@ -32,7 +32,7 @@ class MyCPUContext : public ExecContext
     // vector register interfaces
     const VecRegContainer &readVecRegOperand(const StaticInst *si, int idx) override;
     VecRegContrainer &getWritableVecRegOperand(const StaticInst *si, int idx) override;
-    void setVecRegOperand(cosnt StaticInst *si, int idx, const VecRegContainer &val) override;
+    void setVecRegOperand(const StaticInst *si, int idx, const VecRegContainer &val) override;
 
     // vector register lane interfaces
     template <typename VecElem>
@@ -95,7 +95,7 @@ class MyCPUContext : public ExecContext
     PCState pcState() const override
     { return thread.pcState(); }
 
-    void pcState(cosnt PCState &val) override
+    void pcState(const PCState &val) override
     { thread.pcState(val); }
 
     // memory interfaces
