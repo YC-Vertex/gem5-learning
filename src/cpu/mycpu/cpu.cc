@@ -1,8 +1,9 @@
 #include "cpu.hh"
 
 #include "arch/locked_mem.hh"
-#include "arch/mmapped_ipr.hh"
+// #include "arch/mmapped_ipr.hh"
 #include "arch/utility.hh"
+#include "cpu/mycpu/exec_context.hh"
 #include "debug/MyCPU.hh"
 
 MyCPU::MyCPU(MyCPUParams *params) :
@@ -58,7 +59,7 @@ MyCPU::activateContext(ThreadID tid)
 
     auto e = new EventFunctionWrapper(
         [this] { fetch(); },
-        name + "initial_fetch",
+        name() + "initial_fetch",
         true);
     schedule(e, true);
 }
@@ -126,7 +127,7 @@ MyCPU::finishFetchTranslate(MemoryRequest *request)
         delete request;
         panic("Currently MyCPU does not support fetch faults\n");
     } else {
-        panic_if(port.isBlocked(), "Do not know what to do if the port is blocked");
+        panic_if(iport.isBlocked(), "Do not know what to do if the port is blocked");
         request->send();
     }
 }
@@ -202,10 +203,10 @@ void
 MyCPU::finishDataTranslate(MemoryRequest *request)
 {
     if (traceData) {
-        request->trac(traceData);
+        request->trace(traceData);
     }
 
-    if (requset->getFault() != NoFault) {
+    if (request->getFault() != NoFault) {
         DPRINTF(MyCPU, "Translation of addr %#x faulted\n",
             request->getReq()->getVaddr());
         delete request;
@@ -213,7 +214,8 @@ MyCPU::finishDataTranslate(MemoryRequest *request)
         return;
     } else if (request->getReq()->getFlags().isSet(Request::NO_ACCESS)) {
         panic("Do not know how to deal with Request::NO_ACCESS\n");
-    } else if (request->getReq()->isMmappedIpt()) {
+        /*
+    } else if (request->getReq()->isMmappedIpr()) {
         Cycles delay;
         PacketPtr pkt = request->getPkt();
         if (request->getIsRead()) {
@@ -227,8 +229,9 @@ MyCPU::finishDataTranslate(MemoryRequest *request)
                 name() + ".ipr_delay",
                 true),
             clockEdge(delay));
+        */
     } else {
-        panic_if(port.isBlocked(), "Do not know what to do if the port is blocked\n");
+        panic_if(dport.isBlocked(), "Do not know what to do if the port is blocked\n");
         request->send();
     }
 }
@@ -242,13 +245,13 @@ MyCPU::dataResponse(PacketPtr pkt, StaticInstPtr inst)
 
     Fault fault = inst->completeAcc(pkt, &exec_context, traceData);
 
-    pnic_if(fault != NoFault, "Do not know how to handle this fault!\n");
+    panic_if(fault != NoFault, "Do not know how to handle this fault!\n");
 
     finishExecute(inst, fault);
 }
 
 void
-MyCPU::finishExecute(StaticInstPtr inst, const Fault *fault)
+MyCPU::finishExecute(StaticInstPtr inst, const Fault &fault)
 {
     DPRINTF(MyCPU, "Finishing execute and moving to next inst\n");
 

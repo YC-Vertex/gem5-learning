@@ -48,7 +48,7 @@ class MemoryRequest : public BaseTLB::Translation
     ~MemoryRequest();
 
     void translate();
-    void finish(const Fault &faultm RequestPtr req,
+    void finish(const Fault &fault, RequestPtr req,
         ThreadContext *tc, BaseTLB::Mode mode) override;
     void send();
     void markDelayed() override { };

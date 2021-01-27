@@ -1,6 +1,6 @@
 #include "cpu/mycpu/exec_context.hh"
 
-IntReg
+RegVal
 MyCPUContext::readIntRegOperand(const StaticInst *si, int idx)
 {
     const RegId &reg = si->srcRegIdx(idx);
@@ -9,14 +9,14 @@ MyCPUContext::readIntRegOperand(const StaticInst *si, int idx)
 }
 
 void
-MyCPUContext::setIntRegOperand(const StaticInst *si, int idx, IntReg val)
+MyCPUContext::setIntRegOperand(const StaticInst *si, int idx, RegVal val)
 {
     const RegId &reg = si->destRegIdx(idx);
     assert(reg.isIntReg());
     thread.setIntReg(reg.index(), val);
 }
 
-FloatReg
+RegVal
 MyCPUContext::readFloatRegOperand(const StaticInst *si, int idx)
 {
     const RegId &reg = si->srcRegIdx(idx);
@@ -25,14 +25,14 @@ MyCPUContext::readFloatRegOperand(const StaticInst *si, int idx)
 }
 
 void
-MyCPUContext::setFloatRegOperand(const StaticInst *si, int idx, FloatReg val)
+MyCPUContext::setFloatRegOperand(const StaticInst *si, int idx, RegVal val)
 {
     const RegId &reg = si->destRegIdx(idx);
     assert(reg.isFloatReg());
     thread.setFloatReg(reg.index(), val);
 }
 
-FloatRegBits
+RegVal
 MyCPUContext::readFloatRegOperandBits(const StaticInst *si, int idx)
 {
     const RegId &reg = si->srcRegIdx(idx);
@@ -41,7 +41,7 @@ MyCPUContext::readFloatRegOperandBits(const StaticInst *si, int idx)
 }
 
 void
-MyCPUContext::setFloatRegOperandBits(const StaticInst *si, int idx, IntRegBits val)
+MyCPUContext::setFloatRegOperandBits(const StaticInst *si, int idx, RegVal val)
 {
     const RegId &reg = si->destRegIdx(idx);
     assert(reg.isFloatReg());

@@ -1,0 +1,9 @@
+Import('*')
+
+SimObject('MyCPU.py')
+
+Source('cpu.cc')
+Source('memory_request.cc')
+Source('exec_context.cc')
+
+DebugFlag('MyCPU')

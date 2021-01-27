@@ -5,7 +5,6 @@
 
 #include "config/the_isa.hh"
 #include "cpu/base.hh"
-#include "cpu/mycpu/exec_context.hh"
 #include "cpu/mycpu/memory_request.hh"
 #include "cpu/simple_thread.hh"
 #include "params/MyCPU.hh"
@@ -18,18 +17,18 @@ class MyCPU : public BaseCPU
     {
       private:
         MemoryRequest *outstandingRequest;
-        packetPtr blockedPacket;
+        PacketPtr blockedPacket;
 
       public:
         CPUPort(const std::string &name, MyCPU *owner) :
             RequestPort(name, owner),
             outstandingRequest(nullptr),
-            blockPacket(nullptr)
+            blockedPacket(nullptr)
         { }
 
         void sendPacket(MemoryRequest *request, PacketPtr pkt);
 
-        bool isBlocked() { return outstandingRequest != nullptr); }
+        bool isBlocked() { return outstandingRequest != nullptr; }
 
       protected:
         bool recvTimingResp(PacketPtr pkt) override;
@@ -40,7 +39,7 @@ class MyCPU : public BaseCPU
     {
       public:
         IcachePort(MyCPU *owner) :
-            CPUPort(owner->name + ".icahce_port", owner)
+            CPUPort(owner->name() + ".icahce_port", owner)
         { }
     };
 
@@ -48,7 +47,7 @@ class MyCPU : public BaseCPU
     {
       public:
         DcachePort(MyCPU *owner) :
-            CPUPort(owner->name + ".dcache_port", owner)
+            CPUPort(owner->name() + ".dcache_port", owner)
         { }
     };
 
