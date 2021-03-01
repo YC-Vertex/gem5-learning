@@ -252,9 +252,12 @@ ElfObject::determineArch()
                   "endian Power. Please recompile your binary.\n");
         }
     } else if (emach == EM_PPC64) {
+        arch = Power64;
+        /*
         fatal("The binary you're trying to load is compiled for 64-bit "
               "Power. M5\n only supports 32-bit Power. Please "
               "recompile your binary.\n");
+        */
     } else {
         warn("Unknown architecture: %d\n", emach);
     }

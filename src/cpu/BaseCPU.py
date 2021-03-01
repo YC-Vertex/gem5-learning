@@ -78,6 +78,10 @@ elif buildEnv['TARGET_ISA'] == 'power':
     from m5.objects.PowerTLB import PowerTLB as ArchDTB, PowerTLB as ArchITB
     from m5.objects.PowerInterrupts import PowerInterrupts as ArchInterrupts
     from m5.objects.PowerISA import PowerISA as ArchISA
+elif buildEnv['TARGET_ISA'] == 'power64':
+    from m5.objects.Power64TLB import Power64TLB as ArchDTB, Power64TLB as ArchITB
+    from m5.objects.Power64Interrupts import Power64Interrupts as ArchInterrupts
+    from m5.objects.Power64ISA import Power64ISA as ArchISA
 elif buildEnv['TARGET_ISA'] == 'riscv':
     from m5.objects.RiscvTLB import RiscvTLB as ArchDTB, RiscvTLB as ArchITB
     from m5.objects.RiscvInterrupts import RiscvInterrupts as ArchInterrupts

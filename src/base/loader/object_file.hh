@@ -52,6 +52,7 @@ enum Arch {
     Arm,
     Thumb,
     Power,
+    Power64,
     Riscv64,
     Riscv32
 };

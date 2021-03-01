@@ -1,0 +1,3 @@
+Import('*')
+
+all_isa_list.append('power64')

@@ -1,0 +1,30 @@
+Import('*')
+
+if env['TARGET_ISA'] == 'power64':
+    Dir('isa/formats')
+    Source('decoder.cc')
+    Source('insts/branch.cc')
+    Source('insts/mem.cc')
+    Source('insts/integer.cc')
+    Source('insts/floating.cc')
+    Source('insts/condition.cc')
+    Source('insts/static_inst.cc')
+    Source('interrupts.cc')
+    Source('linux/linux.cc')
+    Source('linux/process.cc')
+    Source('isa.cc')
+    Source('pagetable.cc')
+    Source('process.cc')
+    Source('remote_gdb.cc')
+    Source('tlb.cc')
+    Source('utility.cc')
+
+    SimObject('Power64Interrupts.py')
+    SimObject('Power64ISA.py')
+    SimObject('Power64TLB.py')
+
+    DebugFlag('Power64')
+
+    ISADesc('isa/main.isa')
+
+    GdbXml('power.xml', 'gdb_xml_power')
