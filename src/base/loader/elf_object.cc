@@ -200,6 +200,12 @@ ElfObject::ElfObject(ImageFileDataPtr ifd) : ObjectFile(ifd)
         ++sec_idx;
         section = elf_getscn(elf, sec_idx);
     }
+
+    // revise the program entry if elf-ppc64
+    if (ehdr.e_machine == EM_PPC64) {
+        const uint8_t *p = image.getMem(entry);
+        entry = (*(p+4) << 24) + (*(p+5) << 16) + (*(p+6) << 8) + *(p+7);
+    }
 }
 
 std::string

@@ -156,6 +156,18 @@ class MemoryImage
         }
         return false;
     }
+
+    const uint8_t*
+    getMem(Addr addr) const
+    {
+        for (auto &seg: _segments) {
+            Addr start = seg.base;
+            Addr end = seg.base + seg.size;
+            if (addr >= start && addr < end)
+                return seg.data + (addr - start);
+        }
+        return nullptr;
+    }
 };
 
 static inline std::ostream &
