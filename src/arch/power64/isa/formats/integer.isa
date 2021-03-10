@@ -240,6 +240,28 @@ def format IntShiftOp(code, inst_flags = []) {{
     exec_output += exec_output_rc1
 }};
 
+def format IntShiftOp_64(code, inst_flags = []) {{
+    dict = {'result':'Ra'}
+
+    # Code when Rc is set
+    code_rc1 = code + readXERCode + computeCR0Code % dict
+
+    # Generate the first class
+    (header_output, decoder_output, decode_block, exec_output) = \
+        GenAluOp(name, Name, 'IntShiftOp_64', code, inst_flags,
+                 CheckRcDecode, BasicConstructor)
+
+    # Generate the second class
+    (header_output_rc1, decoder_output_rc1, _, exec_output_rc1) = \
+        GenAluOp(name, Name + 'RcSet', 'IntShiftOp_64', code_rc1, inst_flags,
+                 CheckRcDecode, IntRcConstructor)
+
+    # Finally, add to the other outputs
+    header_output += header_output_rc1
+    decoder_output += decoder_output_rc1
+    exec_output += exec_output_rc1
+}};
+
 
 // Instructions in this format are all reduced to the form Rt = src1 + src2,
 // therefore we just give src1 and src2 definitions. In working out the
@@ -358,6 +380,30 @@ def format IntRotateOp(code, inst_flags = []) {{
     # Generate the second class
     (header_output_rc1, decoder_output_rc1, _, exec_output_rc1) = \
         GenAluOp(name, Name + 'RcSet', 'IntRotateOp', code_rc1, inst_flags,
+                 CheckRcDecode, IntRcConstructor)
+
+    # Finally, add to the other outputs
+    header_output += header_output_rc1
+    decoder_output += decoder_output_rc1
+    exec_output += exec_output_rc1
+}};
+
+def format IntRotateOp_64(code, inst_flags = []) {{
+
+    # The result is always in Ra
+    dict = {'result':'Ra'}
+
+    # Setup the code for when Rc is set
+    code_rc1 = readXERCode + code + computeCR0Code % dict
+
+    # Generate the first class
+    (header_output, decoder_output, decode_block, exec_output) = \
+        GenAluOp(name, Name, 'IntRotateOp_64', code, inst_flags,
+                 CheckRcDecode, BasicConstructor)
+
+    # Generate the second class
+    (header_output_rc1, decoder_output_rc1, _, exec_output_rc1) = \
+        GenAluOp(name, Name + 'RcSet', 'IntRotateOp_64', code_rc1, inst_flags,
                  CheckRcDecode, IntRcConstructor)
 
     # Finally, add to the other outputs

@@ -18,12 +18,15 @@ BitUnion32(ExtMachInst)
 
     // Shifts and masks
     Bitfield<15, 11> sh;
+    Bitfield<1>      sh_ext; // extended, for double-word rotate
     Bitfield<10,  6> mb;
     Bitfield< 5,  1> me;
+    Bitfield<10,  5> mb_me;  // for double-word rotate
 
     // Immediate fields
     Bitfield<15,  0> si;
     Bitfield<15,  0> d;
+    Bitfield<15,  2> ds;
 
     // Special purpose register identifier
     Bitfield<20, 11> spr;

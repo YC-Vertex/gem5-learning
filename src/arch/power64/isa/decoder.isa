@@ -478,6 +478,25 @@ decode OPCODE default Unknown::unknown() {
         20: rlwimi({{ Ra = (rotateValue(Rs, sh) & fullMask) | (Ra & ~fullMask); }});
     }
 
+    format IntRotateOp_64 {
+        30: decode MD_XO {
+            0: rldicl({{
+                Ra = rotateValue(Rs, sh) & genMask(mb_me, 63);
+                }});
+
+            1: rldicr({{
+                Ra = rotateValue(Rs, sh) & genMask(0, mb_me);
+                }});
+
+            2: FailUnimpl::rldic();
+            3: FailUnimpl::rldimi();
+            4: decode MDS_XO {
+                8: FailUnimpl::rldcl();
+                9: FailUnimpl::rldcr();
+            }
+        }
+    }
+
     format LoadDispOp {
         34: lbz({{ Rt = Mem_ub; }});
         40: lhz({{ Rt = Mem_uh; }});
@@ -513,6 +532,11 @@ decode OPCODE default Unknown::unknown() {
         37: stwu({{ Mem = Rs; }});
         53: stfsu({{ Mem_sf = Fs_sf; }});
         55: stfdu({{ Mem_df = Fs; }});
+    }
+
+    62: decode DS_XO {
+        0: StoreDispOp_64::std({{ Mem_ud = Rs_ud; }});
+        1: StoreDispUpdateOp_64::stdu({{ Mem_ud = Rs_ud; }});
     }
 
     17: IntOp::sc({{ return std::make_shared<SESyscallFault>(); }});

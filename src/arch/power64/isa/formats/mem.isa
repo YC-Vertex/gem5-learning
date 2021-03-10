@@ -296,6 +296,15 @@ def format StoreDispOp(memacc_code, ea_code = {{ EA = Ra + disp; }},
 }};
 
 
+def format StoreDispOp_64(memacc_code, ea_code = {{ EA = Ra + disp; }},
+                       ea_code_ra0 = {{ EA = disp; }},
+                       mem_flags = [], inst_flags = []) {{
+    (header_output, decoder_output, decode_block, exec_output) = \
+        GenMemOp(name, Name, memacc_code, ea_code, ea_code_ra0,
+                 'MemDispOp_64', 'Store', mem_flags, inst_flags)
+}};
+
+
 def format LoadDispUpdateOp(memacc_code, ea_code = {{ EA = Ra + disp; }},
                             mem_flags = [], inst_flags = []) {{
 
@@ -320,5 +329,19 @@ def format StoreDispUpdateOp(memacc_code, ea_code = {{ EA = Ra + disp; }},
     (header_output, decoder_output, decode_block, exec_output) = \
         LoadStoreBase(name, Name, ea_code, memacc_code, mem_flags, inst_flags,
                       base_class = 'MemDispOp',
+                      exec_template_base = 'Store')
+}};
+
+
+def format StoreDispUpdateOp_64(memacc_code, ea_code = {{ EA = Ra + disp; }},
+                             mem_flags = [], inst_flags = []) {{
+
+    # Add in the update code
+    memacc_code += 'Ra = EA;'
+
+    # Generate the class
+    (header_output, decoder_output, decode_block, exec_output) = \
+        LoadStoreBase(name, Name, ea_code, memacc_code, mem_flags, inst_flags,
+                      base_class = 'MemDispOp_64',
                       exec_template_base = 'Store')
 }};

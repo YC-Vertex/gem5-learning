@@ -38,6 +38,9 @@ def bitfield OPCODE        <31:26>;
 def bitfield X_XO          <10:0>;
 def bitfield XO_XO         <10:1>;
 def bitfield A_XO          <5:1>;
+def bitfield MD_XO         <4:2>;
+def bitfield MDS_XO        <4:1>;
+def bitfield DS_XO         <1:0>;
 
 // Register fields
 def bitfield RA            <20:16>;

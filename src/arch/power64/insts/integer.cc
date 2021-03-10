@@ -115,6 +115,34 @@ IntShiftOp::generateDisassembly(
 
 
 string
+IntShiftOp_64::generateDisassembly(
+        Addr pc, const Loader::SymbolTable *symtab) const
+{
+    stringstream ss;
+
+    ccprintf(ss, "%-10s ", mnemonic);
+
+    // Print the first destination only
+    if (_numDestRegs > 0) {
+        printReg(ss, _destRegIdx[0]);
+    }
+
+    // Print the first source register
+    if (_numSrcRegs > 0) {
+        if (_numDestRegs > 0) {
+            ss << ", ";
+        }
+        printReg(ss, _srcRegIdx[0]);
+    }
+
+    // Print the shift
+    ss << ", " << sh;
+
+    return ss.str();
+}
+
+
+string
 IntRotateOp::generateDisassembly(
         Addr pc, const Loader::SymbolTable *symtab) const
 {
@@ -137,6 +165,34 @@ IntRotateOp::generateDisassembly(
 
     // Print the shift, mask begin and mask end
     ss << ", " << sh << ", " << mb << ", " << me;
+
+    return ss.str();
+}
+
+
+string
+IntRotateOp_64::generateDisassembly(
+        Addr pc, const Loader::SymbolTable *symtab) const
+{
+    stringstream ss;
+
+    ccprintf(ss, "%-10s ", mnemonic);
+
+    // Print the first destination only
+    if (_numDestRegs > 0) {
+        printReg(ss, _destRegIdx[0]);
+    }
+
+    // Print the first source register
+    if (_numSrcRegs > 0) {
+        if (_numDestRegs > 0) {
+            ss << ", ";
+        }
+        printReg(ss, _srcRegIdx[0]);
+    }
+
+    // Print the shift, mask begin / mask end
+    ss << ", " << sh << ", " << mb_me;
 
     return ss.str();
 }

@@ -47,6 +47,26 @@ class MemDispOp : public MemOp
             Addr pc, const Loader::SymbolTable *symtab) const override;
 };
 
+
+/**
+ * Class for double-word memory operations with displacement.
+ */
+class MemDispOp_64 : public MemOp
+{
+  protected:
+
+    int16_t disp;
+
+    /// Constructor
+    MemDispOp_64(const char *mnem, MachInst _machInst, OpClass __opClass)
+      : MemOp(mnem, _machInst, __opClass), disp(machInst.ds << 2)
+    {
+    }
+
+    std::string generateDisassembly(
+            Addr pc, const Loader::SymbolTable *symtab) const override;
+};
+
 } // namespace Power64ISA
 
 #endif //__ARCH_POWER64_INSTS_MEM_HH__

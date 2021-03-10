@@ -48,19 +48,6 @@ class IntOp : public Power64StaticInst
         return c;
     }
 
-    /* Compute the CR (condition register) field using unsigned comparison */
-    inline uint32_t
-    makeCRField(uint32_t a, uint32_t b, uint32_t xerSO) const
-    {
-        uint32_t c = xerSO;
-
-        /* We've pre-shifted the immediate values here */
-        if (a < b)      { c += 0x8; }
-        else if (a > b) { c += 0x4; }
-        else            { c += 0x2; }
-        return c;
-    }
-
     std::string generateDisassembly(
             Addr pc, const Loader::SymbolTable *symtab) const override;
 };
@@ -111,15 +98,36 @@ class IntShiftOp : public IntOp
 
 
 /**
+ * Class for double-word integer (64-bit) operations with a shift.
+ */
+class IntShiftOp_64 : public IntOp
+{
+  protected:
+
+    uint64_t sh;
+
+    /// Constructor
+    IntShiftOp_64(const char *mnem, MachInst _machInst, OpClass __opClass)
+      : IntOp(mnem, _machInst, __opClass),
+        sh((machInst.sh_ext << 5) | machInst.sh)
+    {
+    }
+
+    std::string generateDisassembly(
+            Addr pc, const Loader::SymbolTable *symtab) const override;
+};
+
+
+/**
  * Class for integer rotate operations.
  */
 class IntRotateOp : public IntShiftOp
 {
   protected:
 
-    uint32_t mb;
-    uint32_t me;
-    uint32_t fullMask;
+    uint64_t mb;
+    uint64_t me;
+    uint64_t fullMask;
 
     /// Constructor
     IntRotateOp(const char *mnem, MachInst _machInst, OpClass __opClass)
@@ -134,11 +142,53 @@ class IntRotateOp : public IntShiftOp
         }
     }
 
-    uint32_t
-    rotateValue(uint32_t rs, uint32_t shift) const
+    uint64_t
+    rotateValue(uint64_t rs, uint64_t shift) const
     {
-        uint32_t n = shift & 31;
-        return (rs << n) | (rs >> (32 - n));
+        uint64_t n = shift & 31;
+        uint64_t mrs = mbits(rs, 31, 0);  // mask
+        uint64_t crs = mrs | (mrs << 32); // concatenate
+        return (crs << n) | (crs >> (64 - n));
+    }
+
+    std::string generateDisassembly(
+            Addr pc, const Loader::SymbolTable *symtab) const override;
+};
+
+
+/**
+ * Class for double-word integer (64-bit) rotate operations.
+ */
+class IntRotateOp_64 : public IntShiftOp_64
+{
+  protected:
+
+    uint64_t mb_me;
+
+    /// Constructor
+    IntRotateOp_64(const char *mnem, MachInst _machInst, OpClass __opClass)
+      : IntShiftOp_64(mnem, _machInst, __opClass),
+        mb_me(machInst.mb_me)
+    {
+    }
+
+    uint64_t
+    genMask(uint64_t mb, uint64_t me) const
+    {
+        uint64_t fullMask;
+        if (me >= mb) {
+            fullMask = mask(63 - mb, 63 - me);
+        } else {
+            fullMask = ~mask(63 - (me + 1), 63 - (mb - 1));
+        }
+        return fullMask;
+    }
+
+    uint64_t
+    rotateValue(uint64_t rs, uint64_t shift) const
+    {
+        uint64_t n = shift & 63;
+        return (rs << n) | (rs >> (64 - n));
     }
 
     std::string generateDisassembly(
