@@ -11,7 +11,7 @@ class Power64Linux : public Linux
 {
   public:
 
-    static const ByteOrder byteOrder = ByteOrder::big;
+    static const ByteOrder byteOrder = ByteOrder::little;
 
     typedef int32_t time_t;
 

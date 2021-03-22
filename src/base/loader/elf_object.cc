@@ -201,8 +201,8 @@ ElfObject::ElfObject(ImageFileDataPtr ifd) : ObjectFile(ifd)
         section = elf_getscn(elf, sec_idx);
     }
 
-    // revise the program entry if elf-ppc64
-    if (ehdr.e_machine == EM_PPC64) {
+    // revise the program entry for big endian Power64
+    if (ehdr.e_machine == EM_PPC64 && ehdr.e_ident[EI_DATA] == ELFDATA2LSB) {
         const uint8_t *p = image.getMem(entry);
         entry = (*(p+4) << 24) + (*(p+5) << 16) + (*(p+6) << 8) + *(p+7);
     }
@@ -259,11 +259,11 @@ ElfObject::determineArch()
         }
     } else if (emach == EM_PPC64) {
         arch = Power64;
-        /*
-        fatal("The binary you're trying to load is compiled for 64-bit "
-              "Power. M5\n only supports 32-bit Power. Please "
-              "recompile your binary.\n");
-        */
+        if (edata != ELFDATA2LSB) {
+            fatal("The binary you're trying to load is compiled for "
+                  "big endian Power64.\ngem5only supports little "
+                  "endian Power64. Please recompile your binary.\n");
+        }
     } else {
         warn("Unknown architecture: %d\n", emach);
     }

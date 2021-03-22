@@ -232,9 +232,9 @@ Power64Process::argsInit(int intSize, int pageSize)
     auxv_array_end += sizeof(zero);
 
     copyStringArray(envp, envp_array_base, env_data_base,
-                    ByteOrder::big, *initVirtMem);
+                    ByteOrder::little, *initVirtMem);
     copyStringArray(argv, argv_array_base, arg_data_base,
-                    ByteOrder::big, *initVirtMem);
+                    ByteOrder::little, *initVirtMem);
 
     initVirtMem->writeBlob(argc_base, &guestArgc, intSize);
 
