@@ -202,7 +202,7 @@ ElfObject::ElfObject(ImageFileDataPtr ifd) : ObjectFile(ifd)
     }
 
     // revise the program entry for big endian Power64
-    if (ehdr.e_machine == EM_PPC64 && ehdr.e_ident[EI_DATA] == ELFDATA2LSB) {
+    if (ehdr.e_machine == EM_PPC64 && ehdr.e_ident[EI_DATA] == ELFDATA2MSB) {
         const uint8_t *p = image.getMem(entry);
         entry = (*(p+4) << 24) + (*(p+5) << 16) + (*(p+6) << 8) + *(p+7);
     }

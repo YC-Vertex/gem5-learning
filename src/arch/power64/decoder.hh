@@ -38,7 +38,7 @@ class Decoder : public InstDecoder
     void
     moreBytes(const PCState &pc, Addr fetchPC, MachInst inst)
     {
-        emi = betoh(inst);
+        emi = letoh(inst);
         instDone = true;
     }
 
